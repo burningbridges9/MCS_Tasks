@@ -81,7 +81,7 @@ int main()
 		double nonParallelSum = 0;
 		for (int i = 0; i < size; i++)
 			nonParallelSum += x[i];
-		printf("\nNon-parallel sum result: %f\n", globalSum);
+		printf("\nNon-parallel sum result: %f\n", nonParallelSum);
 	}
 	MPI_Finalize();
     return 0;
