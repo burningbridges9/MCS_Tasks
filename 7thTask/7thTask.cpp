@@ -59,15 +59,16 @@ void Calculs(double* &xPart, int chunk, int ProcRank, double & localSum, double 
 int main()
 {
 	int ProcRank, ProcNum, chunk;
-	double * x;
-	double * xPart;
-	double localSum = 0;
-	double globalSum=0;
-	MPI_Status st;
+	
 
 	MPI_Init(NULL, NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
 	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
+	double * x;
+	double * xPart;
+	double localSum = 0;
+	double globalSum = 0;
+	MPI_Status st;
 	int size = 2 * ProcNum;
 	//распределение данных по процессам
 	DataInit(x, xPart, ProcNum, ProcRank, size, chunk);

@@ -75,6 +75,11 @@ void Calculs(double* &xPart, double* &yPart, int chunk, int ProcRank, double & l
 int main()
 {
 	int ProcRank, ProcNum, chunk;
+	
+
+	MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
+	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	double * x;
 	double * xPart;
 	double * y;
@@ -82,10 +87,6 @@ int main()
 	double localSum = 0;
 	double globalSum = 0;
 	MPI_Status st;
-
-	MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
-	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	int size = 2 * ProcNum;
 	//распределение данных по процессам
 	DataInit(x, xPart, y, yPart, ProcNum, ProcRank, size, chunk);

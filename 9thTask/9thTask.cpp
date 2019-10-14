@@ -10,7 +10,11 @@
 #include <time.h> 
 using namespace std;
 
-struct Pair{	double value;	int index;};
+struct Pair
+{
+	double value;
+	int index;
+};
 
 void DataInit(double* &x, double* &xPart, int* &indexes, int* &indexesPart,
 	int ProcNum, int ProcRank, int &size, int &chunk)
@@ -26,11 +30,11 @@ void DataInit(double* &x, double* &xPart, int* &indexes, int* &indexesPart,
 	// подготовка данных
 	if (ProcRank == 0)
 	{
-		srand(unsigned(clock()));
+		//srand(unsigned(clock()));
 		printf("\nValue - Index: \n");
 		for (int i = 0; i<size; i++)
 		{
-			x[i] = rand() / double(1000);
+			x[i] =100 - rand() / double(1000);
 			indexes[i] = i;			
 			printf("%f - %d||  ", x[i], indexes[i]);
 		}
@@ -74,22 +78,23 @@ void Calculs(double* &xPart, int* &indexesPart,
 		0, MPI_COMM_WORLD);
 }
 
-
+
+
 
 int main()
 {
 	int ProcRank, ProcNum, chunk;
+
+	Pair globalMin;
+	Pair localMin;
+	MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
+	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	double * x;
 	double * xPart;
 	int * indexes;
 	int * indexesPart;
-	Pair localMin;
-	Pair globalMin;
 	MPI_Status st;
-
-	MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
-	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	int size = 2 * ProcNum;
 	//распределение данных по процессам
 	DataInit(x, xPart, indexes, indexesPart, ProcNum, ProcRank, size, chunk);
@@ -128,7 +133,11 @@ int main()
 //#include <time.h> 
 //using namespace std;
 
-////struct Pair////{////	double value;////	int index;////};
+////struct Pair
+////{
+////	double value;
+////	int index;
+////};
 //
 //void DataInit(struct{double value; double index;}* &x, struct{double value; double index;}* &xPart, int ProcNum, int ProcRank, int &size, int &chunk)
 //{
@@ -185,7 +194,8 @@ int main()
 //		0, MPI_COMM_WORLD);
 //}
 
-
+
+
 
 //int main()
 //{

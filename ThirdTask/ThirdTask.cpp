@@ -47,8 +47,11 @@ int main()
 		int buf = 0;
 		MPI_Status status;
 		MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &st);
+		int GetN = 0;
+		MPI_Get_count(&st, MPI_DOUBLE, &GetN);
+		printf("GetN = %d\n", GetN);
 		printf("\nStatus messages:\nMPI_SOURCE: %d\nMPI_TAG: %d\nMPI_ERROR: %d\n", st.MPI_SOURCE, st.MPI_TAG, st.MPI_ERROR);
-		MPI_Recv(x, N, MPI_DOUBLE,
+		MPI_Recv(x, GetN, MPI_DOUBLE,
 			1, 1, MPI_COMM_WORLD, &st);
 		printf("\nProcess %d:\n", rank);
 		for (int i = 0; i < N; i++)

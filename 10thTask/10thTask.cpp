@@ -102,15 +102,15 @@ void ResultReplication(double* ProcResult, double* Result, int Size,
 
 int main()
 {
-	int ProcRank, ProcNum, chunkRows;
+	int ProcRank, ProcNum, chunkRows;	
+	MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
+	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	double* Matrix; // The first argument - initial matrix
 	double* Vector; // The second argument - initial vector
 	double* Result;
 	double * ProcResult;// Result vector for matrix-vector multiplication
 	double* ProcRows;
-	MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
-	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	int Size = 2 * ProcNum; // Sizes of initial matrix and vector
 	//if (ProcRank == 0)
 	ProcessInitialization(Matrix, Vector, Result, ProcRows, ProcResult,

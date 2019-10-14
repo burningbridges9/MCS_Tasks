@@ -51,15 +51,17 @@ void DataInit(double* &matrix, double* &x, double* &matrixPart,
 int main()
 {
 	int ProcRank, ProcNum, chunk;
+	MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
+	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
+	
 	double * matrix;
 	double * x;
 	double * matrixLines;
 	double * xPart;
 	MPI_Status st;
 
-	MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
-	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
+	
 	int size = 2 * ProcNum;
 	//распределение данных по процессам
 	DataInit(matrix, x, matrixLines,
