@@ -55,14 +55,14 @@ void ProcessInitialization(int* &a, double* &b, double* &buf,
 }
 int main()
 {
-	int ProcRank, ProcNum, chunkRows;
+	int ProcRank, ProcNum, chunkRows;	
+	MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
+	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	int* a;
 	double* b;
 	double * buf;
 	int pos = 0;
-	MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
-	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	int sizeA = 10;
 	int sizeB = 8; 
 	int k1 = sizeA * sizeof(int);

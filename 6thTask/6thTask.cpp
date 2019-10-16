@@ -28,49 +28,93 @@ void DataInit(double* &x, int ProcNum, int ProcRank, int &size)
 	}
 }
 
-void PingPong(double* &x, int ProcRank, int &size)
+void PingPong(double* &x, double *&y, int ProcRank, int &size, int count)
 {
-	int count = 0;
-	int limit = 2;
+	
+	int limit = 3;
 	int partner = (ProcRank + 1) % 2;
 	while (count < limit) {
-		if (ProcRank == count % 2) {
-			// Increment the ping pong count before you send it
+		if (ProcRank == count % 2) 
+		{
 			count++;
+			if (count == 1)
+				MPI_Send(x, size, MPI_DOUBLE, partner, 0, MPI_COMM_WORLD);
+			if (count == 3)
+				MPI_Recv(y, size, MPI_DOUBLE, partner, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			//printf("%d sent and incremented ping_pong_count "
+			//	"%d to %d\n", ProcRank, count,
+			//	partner);
+		}
+		else 
+		{
+			count++;
+			MPI_Recv(y, size, MPI_DOUBLE, partner, 0,
+				MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			MPI_Send(x, size, MPI_DOUBLE, partner, 0,
 				MPI_COMM_WORLD);
-			printf("%d sent and incremented ping_pong_count "
-				"%d to %d\n", ProcRank, count,
-				partner);
-		}
-		else {
-			MPI_Recv(x, size, MPI_DOUBLE, partner, 0,
-				MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			printf("%d sent and incremented ping_pong_count "
-				"%d to %d\n", ProcRank, count,
-				partner);
+			//printf("%d sent and incremented ping_pong_count "
+			//	"%d to %d\n", ProcRank, count,
+			//	partner);
 		}
 	}
 }
 
+void PingPing(double* &x, double *&y, int ProcRank, int &size)
+{
+
+	int limit = 2;
+	int partner = (ProcRank + 1) % 2;
+	MPI_Request request1, request2;
+	MPI_Status status;
+	MPI_Irecv(y, 10, MPI_DOUBLE, partner, 123, MPI_COMM_WORLD, &request1);
+	MPI_Isend(x, 10, MPI_DOUBLE, partner, 123, MPI_COMM_WORLD, &request2);
+	MPI_Wait(&request1, &status);
+	MPI_Wait(&request2, &status);
+}
+
+
 int main()
 {
+	int count = 0;
 	int ProcRank, ProcNum;
-	double * x;
-	MPI_Status st;
-	double t1, t2, dt;
 	MPI_Init(NULL, NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
 	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
-	int size = 10;
-	//распределение данных по процессам
-	DataInit(x, ProcNum, ProcRank, size);
-	t1 = MPI_Wtime();
-	PingPong(x, ProcRank, size);
-	t2 = MPI_Wtime();
-	dt = t2 - t1;
-	if (ProcRank==0)
-		printf("Ping Pong executed for %f\n", dt);
+	double * x;
+	double * y; 
+	double t1, t2, dt;
+	//PingPong
+	/*for (int size = 100; size <= 10000; size += 100)
+	{
+		count = 0;
+		DataInit(x, ProcNum, ProcRank, size);
+		DataInit(y, ProcNum, ProcRank, size);
+		t1 = MPI_Wtime();
+		PingPong(x,y, ProcRank, size, count);
+		t2 = MPI_Wtime();
+		dt = t2 - t1;
+		if (ProcRank == 0)
+			printf("Ping Pong executed for time %f s and size = %i \n", dt, size);
+
+		delete x;
+		delete y;
+	}*/
+	//PingPing
+	for (int size = 100; size <= 10000; size += 100)
+	{
+		DataInit(x, ProcNum, ProcRank, size);
+		DataInit(y, ProcNum, ProcRank, size);
+		t1 = MPI_Wtime();
+		PingPing(x,y, ProcRank, size);
+		t2 = MPI_Wtime();
+		dt = t2 - t1;
+		if (ProcRank == 0)
+			printf("Ping Ping executed for time %f s and size = %i \n", dt, size);
+
+		delete x;
+		delete y;
+	}
+	MPI_Finalize();
     return 0;
 }
 

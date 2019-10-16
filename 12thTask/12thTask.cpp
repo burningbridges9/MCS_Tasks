@@ -105,6 +105,7 @@ int main()
 			MPI_Send(&vector, 1, newType, i, 0, MPI_COMM_WORLD);
 		}
 
+		// on 0 proc
 		for (int j = 0; j<size; j += 4)
 		{
 			for (int k = 0; k<size; k++)
