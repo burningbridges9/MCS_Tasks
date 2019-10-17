@@ -87,13 +87,14 @@ int main()
 
 	Pair globalMin;
 	Pair localMin;
-	MPI_Init(NULL, NULL);
-	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
-	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
 	double * x;
 	double * xPart;
 	int * indexes;
 	int * indexesPart;
+	MPI_Init(NULL, NULL);
+	MPI_Comm_size(MPI_COMM_WORLD, &ProcNum);
+	MPI_Comm_rank(MPI_COMM_WORLD, &ProcRank);
+	
 	MPI_Status st;
 	int size = 2 * ProcNum;
 	//распределение данных по процессам

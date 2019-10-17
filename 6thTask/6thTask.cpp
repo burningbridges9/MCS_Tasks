@@ -61,8 +61,6 @@ void PingPong(double* &x, double *&y, int ProcRank, int &size, int count)
 
 void PingPing(double* &x, double *&y, int ProcRank, int &size)
 {
-
-	int limit = 2;
 	int partner = (ProcRank + 1) % 2;
 	MPI_Request request1, request2;
 	MPI_Status status;
@@ -84,7 +82,7 @@ int main()
 	double * y; 
 	double t1, t2, dt;
 	//PingPong
-	/*for (int size = 100; size <= 10000; size += 100)
+	for (int size = 100; size <= 10000; size += 100)
 	{
 		count = 0;
 		DataInit(x, ProcNum, ProcRank, size);
@@ -98,9 +96,9 @@ int main()
 
 		delete x;
 		delete y;
-	}*/
+	}
 	//PingPing
-	for (int size = 100; size <= 10000; size += 100)
+	/*for (int size = 100; size <= 10000; size += 100)
 	{
 		DataInit(x, ProcNum, ProcRank, size);
 		DataInit(y, ProcNum, ProcRank, size);
@@ -113,7 +111,7 @@ int main()
 
 		delete x;
 		delete y;
-	}
+	}*/
 	MPI_Finalize();
     return 0;
 }

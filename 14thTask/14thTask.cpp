@@ -65,13 +65,13 @@ int main()
 	int pos = 0;
 	int sizeA = 10;
 	int sizeB = 8; 
-	int k1 = sizeA * sizeof(int);
-	int k2 = sizeB * sizeof(double);
+	/*int k1 = sizeA * sizeof(int);
+	int k2 = sizeB * sizeof(double);*/
 	int k = (sizeA+sizeB) * sizeof(double);
 	ProcessInitialization(a, b, buf, sizeA, sizeB, ProcNum, ProcRank);
-	MPI_Pack(a, sizeA, MPI_INT, buf, 144, &pos, MPI_COMM_WORLD);
-	MPI_Pack(b, sizeB, MPI_DOUBLE, buf, 144, &pos, MPI_COMM_WORLD);
-	MPI_Bcast(buf, 144, MPI_PACKED, 0, MPI_COMM_WORLD);
+	MPI_Pack(a, sizeA, MPI_INT, buf, k, &pos, MPI_COMM_WORLD);
+	MPI_Pack(b, sizeB, MPI_DOUBLE, buf, k, &pos, MPI_COMM_WORLD);
+	MPI_Bcast(buf, k, MPI_PACKED, 0, MPI_COMM_WORLD);
 	if (ProcRank != 0)
 	{
 		pos = 0;
